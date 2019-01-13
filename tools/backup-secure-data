@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# $1 = data to backup
+# $2 = backup dir
+
+SRC="${1}"
+BACKUPDIR="${2}"
+
+[ ! -d "${SRC}" ] && {
+    echo -e "[-] source dir not found (${SRC}) ... exiting ...."
+    exit 1
+}
+
+
+[ ! -d "${BACKUPDIR}" ] && {
+    echo -e "[-] BACKUPDIR not found (${BACKUPDIR}) ... exiting ...."
+    exit 1
+}
+
+
+echo -e "[+] backup ${SRC} -> ${BACKUPDIR}" 
+
+
