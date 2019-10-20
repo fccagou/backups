@@ -30,7 +30,7 @@ fi
 # Find whether the connected block device is a backup drive
 for uuid in $(lsblk --noheadings --list --output uuid)
 do
-        if grep --quiet --fixed-strings $uuid $DISKS; then
+        if grep --quiet --fixed-strings "${uuid}" "${DISKS}"; then
                 break
         fi
         uuid=
@@ -46,14 +46,14 @@ echo "Disk $uuid is a backup disk"
 MOUNTPOINT=${PREFIX}/mnt/$uuid
 BACKUPCMD="/etc/backups/backup-${uuid}"
 
-[ ! -d ${MOUNTPOINT} ] && { mkdir ${MOUNTPOINT} || { echo -e "[-] error creating mount point (${MOUNTPOINT})... exiting...\n" ; exit 1 ; } }
+[ ! -d "${MOUNTPOINT}" ] && { mkdir "${MOUNTPOINT}" || { echo -e "[-] error creating mount point (${MOUNTPOINT})... exiting...\n" ; exit 1 ; } }
 
 partition_path=/dev/disk/by-uuid/$uuid
 # Mount file system if not already done. This assumes that if something is already
 # mounted at $MOUNTPOINT, it is the backup drive. It won't find the drive if
 # it was mounted somewhere else.
-(mount | grep $MOUNTPOINT) || mount $partition_path $MOUNTPOINT
-drive=$(lsblk --inverse --noheadings --list --paths --output name $partition_path | head --lines 1)
+(mount | grep "${MOUNTPOINT}") || mount "${partition_path}" "${MOUNTPOINT}"
+drive=$(lsblk --inverse --noheadings --list --paths --output name "${partition_path}" | head --lines 1)
 echo "Drive path: $drive"
 
 if [ ! -x  ${BACKUPCMD} ]
@@ -61,7 +61,7 @@ then
     echo -e "[-] no backup cmd (${BACKUPCMD})\n"
 else
     echo -e "[*] running ${BACKUPCMD})\n"
-    ${BACKUPCMD} ${MOUNTPOINT}
+    ${BACKUPCMD} "${MOUNTPOINT}"
 fi 
 
 
@@ -109,8 +109,8 @@ echo "Completed backup for $DATE"
 sync
 
 if [ -f /etc/backups/autoeject ]; then
-        umount $MOUNTPOINT
-        hdparm -Y $drive
+        umount "${MOUNTPOINT}"
+        hdparm -Y "${drive}"
 fi
 
 if [ -f /etc/backups/backup-suspend ]; then

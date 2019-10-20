@@ -7,17 +7,17 @@ SRC="${1}"
 BACKUPDIR="${2}"
 
 [ ! -d "${SRC}" ] && {
-    echo -e "[-] source dir not found (${SRC}) ... exiting ...."
+	printf -- "[-] source dir not found (%s) ... exiting ....\n" "${SRC}"
     exit 1
 }
 
 
 [ ! -d "${BACKUPDIR}" ] && {
-    echo -e "[-] BACKUPDIR not found (${BACKUPDIR}) ... exiting ...."
+    prinntf -- "[-] BACKUPDIR not found (%s) ... exiting ....\n" "${BACKUPDIR}"
     exit 1
 }
 
 
-echo -e "[+] backup ${SRC} -> ${BACKUPDIR}" 
+printf -- "[+] backup %s -> %s\n"  "${SRC}" "${BACKUPDIR}"
 
 
